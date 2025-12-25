@@ -1,0 +1,4 @@
+template.cpp
+*.exe
+*.out
+.vscode/
