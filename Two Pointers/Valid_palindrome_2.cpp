@@ -32,35 +32,52 @@ ostream &operator<<(ostream &os, const vector<T> &v)
 // =========================
 // 3. SOLUTION CLASS
 // =========================
+// ---------------------------------- Using string reversal
 class Solution
 {
 public:
-    bool isPalindrome(string s)
+    bool validPalindrome(string s)
     {
-
-        int i = 0;
-        string temp;
-        while (i < s.size())
-        {
-            if (isalnum(s[i]) && (!isspace(s[i])))
-            {
-                temp += tolower(s[i]);
-            }
-            i++;
-        }
-
         int left = 0;
-        int right = temp.size() - 1;
+        int right = s.size() - 1;
+        int valid = 0;
         while (left < right)
         {
-            if (temp[left] != temp[right])
-                return false;
+            if (s[left] != s[right])
+            {
+                valid = 0;
+                break;
+            }
 
             left++;
             right--;
+            valid = 1;
         }
 
-        return true;
+        if (valid)
+            return true;
+
+        if (!valid)
+        {
+            int left1 = left;
+            int right1 = right - 1;
+            int left2 = left + 1;
+            int right2 = right;
+
+            string substring_1 = s.substr(left1, right1 - left1 + 1);
+            string substring_2 = s.substr(left2, right2 - left2 + 1);
+
+            string t1 = substring_1;
+            reverse(t1.begin(), t1.end());
+
+            string t2 = substring_2;
+            reverse(t2.begin(), t2.end());
+
+            if (substring_1 == t1 || substring_2 == t2)
+                valid = 1;
+
+            return valid;
+        }
     }
 };
 
@@ -75,8 +92,8 @@ int main()
     Solution sol;
 
     // --- TEST CASE ---
-    string s = "Was it a car or a cat I saw?";
-    bool res = sol.isPalindrome(s);
+    string s = "abc";
+    bool res = sol.validPalindrome(s);
     cout << res;
 
     return 0;
