@@ -32,6 +32,48 @@ ostream &operator<<(ostream &os, const vector<T> &v)
 // =========================
 // 3. SOLUTION CLASS
 // =========================
+// ---------------------------------- Bruteforce Approach
+// class Solution
+// {
+// public:
+//     vector<int> dailyTemperatures(vector<int> &temperatures)
+//     {
+//         int n = temperatures.size();
+//         vector<int> res;
+//         for (int i = 0; i < n; i++)
+//         {
+//             int temp = temperatures[i];
+//             int j = i + 1;
+//             int count = 0;
+//             while (j < n)
+//             {
+//                 // cout << "temp " << temp << " temp-2 " << temperatures[j] << endl;
+//                 if (temp < temperatures[j])
+//                 {
+//                     count++;
+//                     break;
+//                 }
+//                 else
+//                 {
+//                     count++;
+//                     j++;
+//                 }
+//             }
+//             if (j < n)
+//             {
+//                 res.push_back(count);
+//             }
+//             else
+//             {
+//                 res.push_back(0);
+//             }
+//         }
+
+//         return res;
+//     }
+// };
+
+// ------------------------------------ Optimized Solution in O(N) with Stacks
 class Solution
 {
 public:
@@ -39,38 +81,20 @@ public:
     {
 
         int n = temperatures.size();
-        vector<int> res;
-
-        for (int i = 0; i < n; i++)
+        vector<int> res(n, 0);
+        stack<pair<int, int>> stack;
+        for (int i = 0; i < temperatures.size(); i++)
         {
 
-            int temp = temperatures[i];
-            int j = i + 1;
-            int count = 0;
-            while (j < n)
+            int t = temperatures[i];
+            while (!stack.empty() && t > stack.top().first)
             {
-                // cout << "temp " << temp << " temp-2 " << temperatures[j] << endl;
-
-                if (temp < temperatures[j])
-                {
-                    count++;
-                    break;
-                }
-                else
-                {
-                    count++;
-                    j++;
-                }
+                auto pair = stack.top();
+                stack.pop();
+                res[pair.second] = i - pair.second;
             }
 
-            if (j < n)
-            {
-                res.push_back(count);
-            }
-            else
-            {
-                res.push_back(0);
-            }
+            stack.push({t, i});
         }
 
         return res;
