@@ -32,34 +32,54 @@ ostream &operator<<(ostream &os, const vector<T> &v)
 // =========================
 // 3. SOLUTION CLASS
 // =========================
-class Solution
-{
+//------------------------------------------------ Bruteforce but using Hashmap to understand concept
+// class Solution
+// {
+// public:
+//     int subarraySum(vector<int> &nums, int k)
+//     {
+//         int n = nums.size();
+//         vector<int> prefix(n + 1, 0);
+//         prefix[0] = 0;
+//         int sum = 0;
+//         for (int i = 0; i < n; i++)
+//         {
+//             sum += nums[i];
+//             prefix[i + 1] = sum;
+//         }
+//         // for(int i=0;i<n+1;i++){
+//         //     cout<<prefix[i]<<" ";
+//         // }
+//         int count = 0;
+//         for (int i = n; i > 0; i--)
+//         {
+//             int x = prefix[i];
+//             for (int j = i - 1; j >= 0; j--)
+//             {
+//                 if (x - prefix[j] == k)
+//                     count++;
+//             }
+//         }
+//         return count;
+//     }
+// };
+// ------------------------------------- Optimized Approach with Hashmap in O(N)
+
+class Solution {
 public:
-    int subarraySum(vector<int> &nums, int k)
-    {
+    int subarraySum(vector<int>& nums, int k) {
         int n = nums.size();
-        vector<int> prefix(n + 1, 0);
-        prefix[0] = 0;
+        unordered_map<int , int> map;
+        map[0] = 1;
         int sum = 0;
-        for (int i = 0; i < n; i++)
-        {
-            sum += nums[i];
-            prefix[i + 1] = sum;
+        int res = 0;
+        for(int i=0;i<n;i++){
+            sum+=nums[i];
+            int diff = sum -k;
+            res += map[diff];
+            map[sum]++;            
         }
-        // for(int i=0;i<n+1;i++){
-        //     cout<<prefix[i]<<" ";
-        // }
-        int count = 0;
-        for (int i = n; i > 0; i--)
-        {
-            int x = prefix[i];
-            for (int j = i - 1; j >= 0; j--)
-            {
-                if (x - prefix[j] == k)
-                    count++;
-            }
-        }
-        return count;
+        return res;        
     }
 };
 
